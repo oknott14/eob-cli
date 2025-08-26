@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List
 
@@ -15,8 +15,12 @@ from src.ingestion.file_type_branch import FileTypeBranch
 
 @dataclass
 class FileIngesterOptions:
-    file_path_validators: List[BaseFilePathValidator] = []
-    file_type_branches: Dict[str, RunnableLike[Path, List[Path]]] = {}
+    file_path_validators: List[BaseFilePathValidator] = field(
+        default_factory=list[BaseFilePathValidator]
+    )
+    file_type_branches: Dict[str, RunnableLike[Path, List[Path]]] = field(
+        default_factory=dict
+    )
 
 
 class FileIngester(RunnableSequence[str, List[Document]]):

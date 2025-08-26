@@ -14,11 +14,7 @@ def test_file_ingester_accepts_specified_file_types():
 
 
 def test_file_ingester_does_not_accept_other_file_types():
-    ingester = FileIngester(
-        FileIngesterOptions(
-            file_type_branches={".pdf": lambda x: [x], ".zip": lambda x: [x]}
-        )
-    )
+    ingester = FileIngester()
 
     try:
         ingester.invoke("test_file_path.other")
