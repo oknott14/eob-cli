@@ -5,5 +5,10 @@ description = "A Command Line Tool to extract structured JSON data from Explanat
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "langchain-community>=0.3.27",
+    "langchain[google-genai]>=0.3.27",
+    "pypdf>=6.0.0",
+    "pytest>=8.4.1",
+    "pytest-mock>=3.14.1",
     "typer>=0.16.1",
 ]
