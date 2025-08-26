@@ -6,6 +6,7 @@ from langchain_community.document_loaders.pdf import BasePDFLoader
 from langchain_core.documents import Document
 from langchain_core.runnables import Runnable
 from langchain_core.runnables.config import RunnableConfig
+from rich import print
 
 
 class PdfFileReader(Runnable[List[Path], List[List[Document]]]):
@@ -15,4 +16,11 @@ class PdfFileReader(Runnable[List[Path], List[List[Document]]]):
     def invoke(
         self, input: List[Path], config: RunnableConfig | None = None, **kwargs: Any
     ) -> List[List[Document]]:
-        return [self.loader(path).load() for path in input]
+        print("Reading PDFs")
+        documents = []
+
+        for idx, path in enumerate(input):
+            print(f"\t[yellow]{idx + 1} of {len(input)}[/yellow]: {path}")
+            documents.append(self.loader(path).load())
+
+        return documents

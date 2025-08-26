@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict, List
 
 from langchain_core.documents import Document
-from langchain_core.runnables import Runnable, RunnableLambda, RunnableSequence
+from langchain_core.runnables import RunnableLambda, RunnableSequence
 from langchain_core.runnables.base import RunnableLike
 
 from src.ingestion.file_path_validator.file_path_validator import FilePathValidator
@@ -26,10 +26,6 @@ class FileIngesterOptions:
         default_factory=dict
     )
 
-    file_reader: Runnable[List[Path], List[List[Document]]] = field(
-        default_factory=PdfFileReader
-    )
-
 
 class FileIngester(RunnableSequence[str, List[List[Document]]]):
     def __init__(self, config: FileIngesterOptions = FileIngesterOptions()):
@@ -38,6 +34,5 @@ class FileIngester(RunnableSequence[str, List[List[Document]]]):
             FileTypeBranch[List[List[Document]]](
                 config.file_type_branches, config.default_file_type_branch
             ),
-            config.file_reader,
             name="FileIngester",
         )

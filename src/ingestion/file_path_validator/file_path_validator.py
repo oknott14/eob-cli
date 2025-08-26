@@ -3,6 +3,7 @@ from typing import Any, List
 
 from langchain_core.runnables import Runnable
 from langchain_core.runnables.config import RunnableConfig
+from rich import print
 
 from src.ingestion.file_path_validator.validators.base_validator import (
     BaseFilePathValidator,
@@ -18,7 +19,7 @@ class FilePathValidator(Runnable[str, Path]):
         self, input: str, config: RunnableConfig | None = None, **kwargs: Any
     ) -> Path:
         path = Path(input)
-
+        print("Validating File")
         for validator in self.validators:
             validator.validate(path)
 

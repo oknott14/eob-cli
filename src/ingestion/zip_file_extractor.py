@@ -5,6 +5,7 @@ from typing import Any, Iterable, List, Union
 
 from langchain_core.runnables import Runnable
 from langchain_core.runnables.config import RunnableConfig
+from rich import print
 
 from src.exceptions.file_path import FileDoesNotExistException, InvalidZipFileException
 
@@ -54,6 +55,7 @@ class ZipFileExtractor(Runnable[Path, List[Path]]):
             FileDoesNotExistException: If the specified zip file does not exist.
             InvalidZipFileException: If the file is not a valid zip archive.
         """
+        print(f"Extracting {path} to {self.extract_to}")
         try:
             with zipfile.ZipFile(path, "r") as zip_ref:
                 zip_ref.extractall(self.extract_to)
@@ -72,6 +74,7 @@ class ZipFileExtractor(Runnable[Path, List[Path]]):
         Returns:
             List[Path]: An array of Path objects for all matching files.
         """
+        print("Parsing Extracted File Paths")
         found_files = []
         # os.walk yields a 3-tuple: (root, directories, files)
         for root, _, files in walk(self.extract_to):
