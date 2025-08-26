@@ -1,11 +1,10 @@
 from pathlib import Path
 
 from src.exceptions.file_path import InvalidFilePathException
+from src.ingestion.file_path_validator.file_path_validator import FilePathValidator
 from src.ingestion.file_path_validator.validators.base_validator import (
     BaseFilePathValidator,
 )
-
-from ...src.ingestion.file_path_validator.file_path_validator import FilePathValidator
 
 
 class TestValidator(BaseFilePathValidator):
