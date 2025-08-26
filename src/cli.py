@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import typer
+from langchain_core.runnables import RunnableLambda
 from typing_extensions import Annotated
 
 from src.ingestion.file_ingester import FileIngester, FileIngesterOptions
@@ -10,6 +11,7 @@ from src.ingestion.file_path_validator.validators.file_exists_validator import (
 from src.ingestion.file_path_validator.validators.file_type_validator import (
     FileTypeValidator,
 )
+from src.ingestion.pdf_file_reader import PdfFileReader
 from src.ingestion.zip_file_extractor import ZipFileExtractor
 
 
@@ -28,6 +30,8 @@ def extract_eob(
         ),
     ] = str(Path.cwd() / "temp"),
 ):
+    file_reader = PdfFileReader()
+
     return FileIngester(
         FileIngesterOptions(
             file_path_validators=[
@@ -35,8 +39,10 @@ def extract_eob(
                 FileTypeValidator({".pdf", ".zip"}),
             ],
             file_type_branches={
-                ".pdf": lambda x: [x],
-                ".zip": ZipFileExtractor(zipFileDestination, {".pdf"}),
+                ".pdf": RunnableLambda(lambda x: [x]).pipe(file_reader),
+                ".zip": ZipFileExtractor(zipFileDestination, {".pdf"}).pipe(
+                    file_reader
+                ),
             },
         )
     ).invoke(file)
