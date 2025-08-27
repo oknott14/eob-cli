@@ -30,7 +30,7 @@ class FileIngesterOptions:
     )
 
 
-class FileIngester(RunnableSequence[str, List[Any]]):
+class FileIngester(RunnableSequence[str, Any]):
     def __init__(self, config: FileIngesterOptions = FileIngesterOptions()):
         if not config.extract_to:
             config.extract_to = Path.cwd() / "temp" / "extracted_eobs"
@@ -57,4 +57,4 @@ class FileIngester(RunnableSequence[str, List[Any]]):
 
     @classmethod
     def is_zip(cls, path: Path) -> bool:
-        return  path.suffix.lower() == ".zip"
+        return path.suffix.lower() == ".zip"

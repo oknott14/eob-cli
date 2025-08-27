@@ -15,7 +15,7 @@ from src.ingestion.file_path_validator.validators.file_type_validator import (
 class EobIngester(FileIngester):
     def __init__(
         self,
-        next: Optional[Runnable[List[Document], List[Any]]] = None,
+        next: Optional[Runnable[List[Document], Any]] = None,
         zipFileDestination: Optional[str] = None,
     ):
         super().__init__(

@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 import typer
 from rich import print
@@ -7,7 +8,9 @@ from typing_extensions import Annotated
 from src.exceptions.file_path import InvalidFilePathException
 from src.extraction.eob_extractor import EobExtractor
 from src.ingestion.eob_ingester import EobIngester
-from src.util import RunnableDump, zip_directory
+from src.output.console_output import ConsoleOutput
+from src.output.file_output import FileOutput
+from src.util import zip_directory
 
 cli = typer.Typer()
 
@@ -19,8 +22,17 @@ def extract_eob(
         typer.Option(
             help="The absolute file path to either a single EOB pdf or a Zip file of many EOB pdfs.",
             dir_okay=False,
+            file_okay=True,
         ),
     ],
+    o: Annotated[
+        Optional[str],
+        typer.Option(
+            help="Output directory for extracted json files",
+            dir_okay=True,
+            file_okay=False,
+        ),
+    ] = None,
 ):
     try:
         print(
@@ -28,11 +40,13 @@ def extract_eob(
         )
 
         zip_file_destination = str(Path.cwd() / "temp" / "extracted_eobs")
-        return (
-            EobIngester(EobExtractor(), zip_file_destination)
-            .pipe(RunnableDump(Path.cwd() / "temp" / "llm_output.json"))
-            .invoke(file)
+
+        chain = EobIngester(
+            EobExtractor().pipe(FileOutput(o) if o else ConsoleOutput()),
+            zip_file_destination,
         )
+
+        return chain.invoke(file)
     except InvalidFilePathException as e:
         raise e
     except Exception as e:
