@@ -1,20 +1,11 @@
 from pathlib import Path
 
 import typer
-from langchain_core.runnables import RunnableLambda
 from rich import print
 from typing_extensions import Annotated
 
 from src.exceptions.file_path import InvalidFilePathException
-from src.ingestion.file_ingester import FileIngester, FileIngesterOptions
-from src.ingestion.file_path_validator.validators.file_exists_validator import (
-    FileExistsValidator,
-)
-from src.ingestion.file_path_validator.validators.file_type_validator import (
-    FileTypeValidator,
-)
-from src.ingestion.pdf_file_reader import PdfFileReader
-from src.ingestion.zip_file_extractor import ZipFileExtractor
+from src.ingestion.eob_ingester import EobIngester
 from src.util import DocumentListDump, RunnableLog, zip_directory
 
 cli = typer.Typer()
@@ -32,7 +23,7 @@ def extract_eob(
     zipFileDestination: Annotated[
         str,
         typer.Option(
-            default=str(Path.cwd() / "temp"),
+            default=str(Path.cwd() / "temp" / "eobs"),
             help="The directory to extract the zipped EOB PDFs to.",
         ),
     ] = str(Path.cwd() / "temp"),
@@ -42,27 +33,12 @@ def extract_eob(
             f"[green]Begining EOB File Extraction[/green]\n\t[yellow]File[/yellow]: {file}"
         )
 
-        file_reader = PdfFileReader()
-
         return (
-            FileIngester(
-                FileIngesterOptions(
-                    file_path_validators=[
-                        FileExistsValidator(),
-                        FileTypeValidator({".pdf", ".zip"}),
-                    ],
-                    file_type_branches={
-                        ".pdf": RunnableLambda(lambda x: [x]).pipe(file_reader),
-                        ".zip": ZipFileExtractor(zipFileDestination, {".pdf"}).pipe(
-                            file_reader
-                        ),
-                    },
-                )
-            )
+            EobIngester(zipFileDestination)
             .pipe(RunnableLog())
             .pipe(
                 DocumentListDump(
-                    Path.cwd() / "extracted_eob_documents" / "docments.json"
+                    Path.cwd() / "temp" / "extracted_eob_documents" / "docments.json"
                 )
             )
             .invoke(file)
