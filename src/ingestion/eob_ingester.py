@@ -1,4 +1,7 @@
-from langchain_core.runnables import RunnableLambda
+from typing import Any, List, Optional
+
+from langchain_core.documents import Document
+from langchain_core.runnables import Runnable
 
 from src.ingestion.file_ingester import FileIngester, FileIngesterOptions
 from src.ingestion.file_path_validator.validators.file_exists_validator import (
@@ -7,24 +10,21 @@ from src.ingestion.file_path_validator.validators.file_exists_validator import (
 from src.ingestion.file_path_validator.validators.file_type_validator import (
     FileTypeValidator,
 )
-from src.ingestion.file_reader.pdf_file_reader import PdfFileReader
-from src.ingestion.runnables.zip_file_extractor import ZipFileExtractor
 
 
 class EobIngester(FileIngester):
-    def __init__(self, zipFileDestination: str):
-        file_reader = PdfFileReader()
+    def __init__(
+        self,
+        next: Optional[Runnable[List[Document], List[Any]]] = None,
+        zipFileDestination: Optional[str] = None,
+    ):
         super().__init__(
             FileIngesterOptions(
                 file_path_validators=[
                     FileExistsValidator(),
                     FileTypeValidator({".pdf", ".zip"}),
                 ],
-                file_type_branches={
-                    ".pdf": RunnableLambda(lambda x: [x]).pipe(file_reader),
-                    ".zip": ZipFileExtractor(zipFileDestination, {".pdf"}).pipe(
-                        file_reader
-                    ),
-                },
+                extract_to=zipFileDestination,
+                next=next,
             )
         )

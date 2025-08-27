@@ -9,18 +9,14 @@ from langchain_core.runnables.config import RunnableConfig
 from rich import print
 
 
-class PdfFileReader(Runnable[List[Path], List[List[Document]]]):
+class PdfFileReader(Runnable[Path, List[Document]]):
     def __init__(self, loader: Type[BasePDFLoader] = PyPDFLoader):
         self.loader = loader
 
     def invoke(
-        self, input: List[Path], config: RunnableConfig | None = None, **kwargs: Any
-    ) -> List[List[Document]]:
+        self, input: Path, config: RunnableConfig | None = None, **kwargs: Any
+    ) -> List[Document]:
         print("Reading PDFs")
-        documents = []
 
-        for idx, path in enumerate(input):
-            print(f"\t[yellow]{idx + 1} of {len(input)}[/yellow]: {path}")
-            documents.append(self.loader(path).load())
-
-        return documents
+        print(f"\t[yellow]Reading[/yellow]: {input}")
+        return self.loader(input).load()

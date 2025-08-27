@@ -36,14 +36,9 @@ def extract_eob(
         )
 
         return (
-            EobIngester(zipFileDestination)
-            .pipe(
-                RunnableEach(
-                    bound=EobExtractor().pipe(
-                        RunnableDump(Path.cwd() / "temp" / "llm_output.json")
-                    )
-                )
-            )
+            EobIngester(EobExtractor(), zipFileDestination)
+            .pipe(RunnableEach(bound=EobExtractor()))
+            .pipe(RunnableDump(Path.cwd() / "temp" / "llm_output.json"))
             .invoke(file)
         )
     except InvalidFilePathException as e:

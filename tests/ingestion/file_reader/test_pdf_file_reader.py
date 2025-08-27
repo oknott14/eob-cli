@@ -15,14 +15,12 @@ def test_reader_reads_single_pdf():
 
     reader = PdfFileReader()
 
-    results = reader.invoke(paths)
+    result = reader.invoke(paths[0])
 
-    assert len(results) == len(paths)
-    for result in results:
-        assert len(result)
+    assert len(result)
 
-        for document in result:
-            assert len(document.page_content)
+    for document in result:
+        assert len(document.page_content)
     cleanup_dir(test_dir)
 
 
@@ -37,7 +35,7 @@ def test_reader_reads_many_pdfs():
 
     reader = PdfFileReader()
 
-    results = reader.invoke(paths)
+    results = reader.batch(paths)
 
     assert len(results) == len(paths)
     for result in results:
