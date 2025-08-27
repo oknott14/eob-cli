@@ -10,16 +10,11 @@ from src.ingestion.file_path_validator.file_path_validator import FilePathValida
 from src.ingestion.file_path_validator.validators.base_validator import (
     BaseFilePathValidator,
 )
-from src.ingestion.file_reader.pdf_file_reader import PdfFileReader
 from src.ingestion.runnables.file_type_branch import FileTypeBranch
 
 
 @dataclass
 class FileIngesterOptions:
-    default_file_type_branch: RunnableLike[Path, List[List[Document]]] = field(
-        default_factory=PdfFileReader
-    )
-
     file_path_validators: List[BaseFilePathValidator] = field(
         default_factory=list[BaseFilePathValidator]
     )
@@ -32,8 +27,6 @@ class FileIngester(RunnableSequence[str, List[List[Document]]]):
     def __init__(self, config: FileIngesterOptions = FileIngesterOptions()):
         super().__init__(
             FilePathValidator(config.file_path_validators),
-            FileTypeBranch[List[List[Document]]](
-                config.file_type_branches, config.default_file_type_branch
-            ),
+            FileTypeBranch[List[List[Document]]](config.file_type_branches),
             name="FileIngester",
         )

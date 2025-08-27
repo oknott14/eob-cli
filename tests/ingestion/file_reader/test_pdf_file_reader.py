@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from src.ingestion.pdf_file_reader import PdfFileReader
+from src.ingestion.file_reader.pdf_file_reader import PdfFileReader
 from tests.util.file_system import cleanup_dir, create_test_files, write_to_pdf_file
 
 

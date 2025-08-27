@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from src.exceptions.file_path import InvalidFileTypeException
-from src.ingestion.file_type_branch import FileTypeBranch
+from src.ingestion.runnables.file_type_branch import FileTypeBranch
 
 
 def test_file_type_branch_uses_config(mocker):

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from src.ingestion.zip_file_extractor import ZipFileExtractor
+from src.ingestion.runnables.zip_file_extractor import ZipFileExtractor
 from tests.util.file_system import cleanup_dir, create_test_files, create_zip_file
 
 

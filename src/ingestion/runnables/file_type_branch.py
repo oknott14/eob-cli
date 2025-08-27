@@ -5,12 +5,13 @@ from langchain_core.runnables import RunnableBranch
 from langchain_core.runnables.base import RunnableLike
 from langchain_core.runnables.utils import Output
 
+from src.exceptions.file_path import InvalidFileTypeException
+
 
 class FileTypeBranch(RunnableBranch[Path, Output]):
     def __init__(
         self,
         config: Dict[str, RunnableLike[Path, Output]],
-        default: RunnableLike[Path, Output],
     ):
         def branch_runnable(
             file_type: str, runnable: RunnableLike[Path, Output]
@@ -22,4 +23,7 @@ class FileTypeBranch(RunnableBranch[Path, Output]):
             for file_type, runnable in config.items()
         ]
 
-        super().__init__(*branches, default)
+        def throw_error(path: Path):
+            raise InvalidFileTypeException(path)
+
+        super().__init__(*branches, throw_error)
