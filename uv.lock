@@ -215,6 +215,7 @@ dependencies = [
     { name = "pypdf" },
     { name = "pytest" },
     { name = "pytest-mock" },
+    { name = "python-dotenv" },
     { name = "reportlab" },
     { name = "typer" },
 ]
@@ -226,6 +227,7 @@ requires-dist = [
     { name = "pypdf", specifier = ">=6.0.0" },
     { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest-mock", specifier = ">=3.14.1" },
+    { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "reportlab", specifier = ">=4.4.3" },
     { name = "typer", specifier = ">=0.16.1" },
 ]

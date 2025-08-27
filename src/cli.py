@@ -15,7 +15,7 @@ from src.ingestion.file_path_validator.validators.file_type_validator import (
 )
 from src.ingestion.pdf_file_reader import PdfFileReader
 from src.ingestion.zip_file_extractor import ZipFileExtractor
-from src.util import RunnableLog, zip_directory
+from src.util import DocumentListDump, RunnableLog, zip_directory
 
 cli = typer.Typer()
 
@@ -60,6 +60,11 @@ def extract_eob(
                 )
             )
             .pipe(RunnableLog())
+            .pipe(
+                DocumentListDump(
+                    Path.cwd() / "extracted_eob_documents" / "docments.json"
+                )
+            )
             .invoke(file)
         )
     except InvalidFilePathException as e:
