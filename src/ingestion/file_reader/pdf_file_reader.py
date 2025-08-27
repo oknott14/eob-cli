@@ -20,3 +20,13 @@ class PdfFileReader(Runnable[Path, List[Document]]):
 
         print(f"\t[yellow]Reading[/yellow]: {input}")
         return self.loader(input).load()
+
+    def batch(
+        self,
+        inputs: List[Path],
+        config: RunnableConfig | List[RunnableConfig] | None = None,
+        *,
+        return_exceptions: bool = False,
+        **kwargs: Any | None,
+    ) -> List[List[Document]]:
+        return [self.loader(input).load() for input in inputs]

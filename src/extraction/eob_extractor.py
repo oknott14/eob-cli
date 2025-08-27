@@ -7,7 +7,7 @@ from langchain_core.runnables import RunnableSequence
 from src.extraction.llm.gemini_flash import GoogleGeminiFlash
 from src.extraction.prompt.extract_data_prompt_template import ExtractDataPromptTemplate
 from src.extraction.structured_output.extraction_structured_output import (
-    VerboseExtractionOutput,
+    ExtractionOutput,
 )
 
 
@@ -16,7 +16,7 @@ class EobExtractorOptions:
     model_kwargs: Dict[str, Any] = field(default_factory=dict)
 
 
-class EobExtractor(RunnableSequence[List[Document], List[VerboseExtractionOutput]]):
+class EobExtractor(RunnableSequence[List[Document], List[ExtractionOutput]]):
     """
     Runnable class that extracts structured data from a single EOB document.
 
@@ -30,7 +30,6 @@ class EobExtractor(RunnableSequence[List[Document], List[VerboseExtractionOutput
             lambda doc_list: {"documents": doc_list},
             ExtractDataPromptTemplate(),
             GoogleGeminiFlash(**extractor_options.model_kwargs).with_structured_output(
-                VerboseExtractionOutput.model_json_schema()
+                ExtractionOutput, method="json_mode"
             ),
-            # PydanticOutputParser(pydantic_object=VerboseExtractionOutput),
         )

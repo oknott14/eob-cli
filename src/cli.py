@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import typer
-from langchain_core.runnables.base import RunnableEach
 from rich import print
 from typing_extensions import Annotated
 
@@ -22,22 +21,15 @@ def extract_eob(
             dir_okay=False,
         ),
     ],
-    zipFileDestination: Annotated[
-        str,
-        typer.Option(
-            default=str(Path.cwd() / "temp" / "eobs"),
-            help="The directory to extract the zipped EOB PDFs to.",
-        ),
-    ] = str(Path.cwd() / "temp"),
 ):
     try:
         print(
             f"[green]Begining EOB File Extraction[/green]\n\t[yellow]File[/yellow]: {file}"
         )
 
+        zip_file_destination = str(Path.cwd() / "temp" / "extracted_eobs")
         return (
-            EobIngester(EobExtractor(), zipFileDestination)
-            .pipe(RunnableEach(bound=EobExtractor()))
+            EobIngester(EobExtractor(), zip_file_destination)
             .pipe(RunnableDump(Path.cwd() / "temp" / "llm_output.json"))
             .invoke(file)
         )

@@ -40,7 +40,7 @@ class FileIngester(RunnableSequence[str, List[Any]]):
         if config.next is not None:
             next_chain = next_chain.pipe(config.next)
 
-        zip_chain = ZipFileExtractor(config.extract_to).pipe(next_chain.batch)
+        zip_chain = ZipFileExtractor(config.extract_to, {".pdf"}).pipe(next_chain.batch)
         single_file_chain = next_chain.pipe(lambda x: [x])
 
         super().__init__(
@@ -57,4 +57,4 @@ class FileIngester(RunnableSequence[str, List[Any]]):
 
     @classmethod
     def is_zip(cls, path: Path) -> bool:
-        return path.suffix.lower() == ".zip"
+        return  path.suffix.lower() == ".zip"
