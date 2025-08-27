@@ -14,6 +14,16 @@ Financial information makes up a crucial portion of the EOB. This includes the p
 
 Additional important data includes claim numbers for reference, processing dates, and any denial codes or explanations if services weren't covered. Some EOBs also include appeal rights information if the patient disagrees with the insurance decision.
 
+### Data Required By Law
+
+The Affordable Care Act (ACA) requires that EOBs include a specific set of basic details to ensure consumers receive essential information. This content includes:
+• The patient and provider's information
+• The service date and description
+• The total amount billed
+• The amount the plan paid
+• The amount the patient is responsible for (copay, deductible, coinsurance)
+• An explanation for any denials of coverage
+
 ## Usage in Healthcare Settings
 
 In hospitals and urgent care facilities, EOBs play a critical role in the revenue cycle and patient financial services. Healthcare facilities use EOBs to reconcile payments received from insurance companies against their original claims. When payments don't match expectations, billing departments use the EOB information to identify issues like denied services, reduced payments, or processing errors.
