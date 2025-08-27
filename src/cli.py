@@ -1,12 +1,14 @@
 from pathlib import Path
 
 import typer
+from langchain_core.runnables.base import RunnableEach
 from rich import print
 from typing_extensions import Annotated
 
 from src.exceptions.file_path import InvalidFilePathException
+from src.extraction.eob_extractor import EobExtractor
 from src.ingestion.eob_ingester import EobIngester
-from src.util import DocumentListDump, RunnableLog, zip_directory
+from src.util import RunnableDump, zip_directory
 
 cli = typer.Typer()
 
@@ -35,10 +37,11 @@ def extract_eob(
 
         return (
             EobIngester(zipFileDestination)
-            .pipe(RunnableLog())
             .pipe(
-                DocumentListDump(
-                    Path.cwd() / "temp" / "extracted_eob_documents" / "docments.json"
+                RunnableEach(
+                    bound=EobExtractor().pipe(
+                        RunnableDump(Path.cwd() / "temp" / "llm_output.json")
+                    )
                 )
             )
             .invoke(file)

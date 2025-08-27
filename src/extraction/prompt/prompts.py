@@ -72,9 +72,9 @@ Extract the required data from the provided document
 
 document_format_prompt = HumanMessagePromptTemplate.from_template(
     """{% for doc in documents -%}                                                      
-PAGE NUMBER: {doc.metadata.page} of {doc.metadata.total_pages}
+PAGE NUMBER: {{doc.metadata['page']}} of {{doc.metadata['total_pages']}}
 PAGE CONTENT:
-{doc.page_content}
+{{doc.page_content}}
 {%- endfor -%}""",
     template_format="jinja2",
 )
