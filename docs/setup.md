@@ -35,6 +35,8 @@ The eob-cli requires a few environment variables to be defined. These can be def
 GOOGLE_API_KEY=<your_google_api_key>
 ```
 
+Instructions for creating a Google API Key can be found [here](https://ai.google.dev/gemini-api/docs/api-key#set-api-env-var)
+
 ## Run the Application
 
 See [cli](./cli.md)
