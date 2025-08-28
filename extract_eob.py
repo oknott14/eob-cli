@@ -5,4 +5,4 @@ from src.config import config
 
 if __name__ == "__main__":
     config()
-    typer.run(cli.extract_eob)
+    typer.run(cli.process_eob)

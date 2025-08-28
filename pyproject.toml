@@ -15,6 +15,3 @@ dependencies = [
     "reportlab>=4.4.3",
     "typer>=0.16.1",
 ]
-
-[project.scripts]
-onehot = "eob-cli.main"
