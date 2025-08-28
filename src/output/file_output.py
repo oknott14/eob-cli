@@ -1,18 +1,17 @@
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 from langchain_core.runnables import Runnable
 from langchain_core.runnables.config import RunnableConfig
 from pydantic import BaseModel
+from rich import print
 
 
 class FileOutput(Runnable[BaseModel, BaseModel]):
-    files_dumped = 0
-
     def __init__(
         self,
         output_dir: Union[str, Path],
-        file_name_key: Optional[str] = None,
+        file_name_key: str,
         overwrite: bool = False,
     ):
         self.file_name_key = file_name_key
@@ -23,21 +22,14 @@ class FileOutput(Runnable[BaseModel, BaseModel]):
         self, input: BaseModel, config: RunnableConfig | None = None, **kwargs: Any
     ) -> BaseModel:
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        model_file_path = Path(input.__getattribute__(self.file_name_key))
+        file_name = model_file_path.name.removesuffix(model_file_path.suffix)
 
-        file_name = f"eob_{self.files_dumped}.json"
-
-        if self.file_name_key:
-            model_file_name = Path(input.__getattribute__(self.file_name_key))
-            name = model_file_name.name.removesuffix(model_file_name.suffix)
-            file_name = f"{name}.json"
-        else:
-            self.files_dumped += 1
-
-        file_path = self.output_dir / file_name
+        file_path = self.output_dir / f"{file_name}.json"
         file_path.touch(exist_ok=self.overwrite)
+        print(f"Writing Results for {model_file_path} to {file_path}")
 
         file = open(file_path, "w")
-
         file.write(input.model_dump_json(indent=2))
 
         file.close()
