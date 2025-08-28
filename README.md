@@ -26,4 +26,18 @@ The EOB PDF Data Extractor is a command-line application designed to:
 
 ## Setup / Usage
 
-TBD
+To setup the project, read the setup [guide](./docs/setup.md) in the _./docs_ folder.
+
+To begin using the project, there are sample EOB documents in the _./eobs_ folder. Additionally, there is a zip of all EOBs named _eobs.zip_ in the root directory.
+
+Once the project is setup, data can be extracted from these files using:
+
+```
+python3 extract_eob.py --file <path_to_file>
+```
+
+For more infomation visit the [cli docs](./docs/cli)
+
+## Approach
+
+For a better look at how the CLI works, check out the [process docs](./docs/eob-extraction-process.md)
