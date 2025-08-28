@@ -24,14 +24,6 @@ The EOB PDF Data Extractor is a command-line application designed to:
 - 🧪 Comprehensive Testing: Includes test coverage with real-world EOB samples
 - 📊 Structured Output: Consistent JSON schema for seamless downstream integration
 
-## Architecture Approach
+## Setup / Usage
 
-The application employs a multi-stage processing pipeline:
-
-- CLI - Command Line Interface for users to configure and run the EOB extractor
-- Document Ingestion - PDF parsing and text extraction with layout preserv ation
-- Content Analysis - Gemini Flash processes document structure and content
-- Data Extraction - Structured output generation using schema-enforced prompts
-- Validation & Output - JSON formatting with error handling and quality checks
-
-This approach ensures reliable extraction across diverse EOB formats while maintaining the flexibility to adapt to new document layouts and insurance provider variations.
+TBD
