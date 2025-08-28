@@ -66,7 +66,7 @@ def process_eob(
 ):
     try:
         print(
-            f"[green]Begining EOB File Processing[/green]\n\t[yellow]File[/yellow]: {file}"
+            f"[green]Begining EOB File Processing[/green]\t([yellow]File[/yellow]: {file})"
         )
 
         # Runnable for formatting and presenting output

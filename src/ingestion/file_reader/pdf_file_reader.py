@@ -16,9 +16,7 @@ class PdfFileReader(Runnable[Path, List[Document]]):
     def invoke(
         self, input: Path, config: RunnableConfig | None = None, **kwargs: Any
     ) -> List[Document]:
-        print("Reading PDFs")
-
-        print(f"\t[yellow]Reading[/yellow]: {input}")
+        print(f"Reading PDF [purple]{input}[/purple]")
         return self.loader(input).load()
 
     def batch(
@@ -29,4 +27,4 @@ class PdfFileReader(Runnable[Path, List[Document]]):
         return_exceptions: bool = False,
         **kwargs: Any | None,
     ) -> List[List[Document]]:
-        return [self.loader(input).load() for input in inputs]
+        return [self.invoke(input, config, **kwargs) for input in inputs]

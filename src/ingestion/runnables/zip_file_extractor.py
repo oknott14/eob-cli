@@ -55,7 +55,9 @@ class ZipFileExtractor(Runnable[Path, List[Path]]):
             FileDoesNotExistException: If the specified zip file does not exist.
             InvalidZipFileException: If the file is not a valid zip archive.
         """
-        print(f"Extracting {path} to {self.extract_to}")
+        print(
+            f"Extracting [purple]{path}[/purple] to [yellow]{self.extract_to}[/yellow]"
+        )
         try:
             with zipfile.ZipFile(path, "r") as zip_ref:
                 zip_ref.extractall(self.extract_to)
@@ -74,7 +76,7 @@ class ZipFileExtractor(Runnable[Path, List[Path]]):
         Returns:
             List[Path]: An array of Path objects for all matching files.
         """
-        print("Parsing Extracted File Paths")
+        print("Searching Unzipped Directory")
         found_files = []
         # os.walk yields a 3-tuple: (root, directories, files)
         for root, _, files in walk(self.extract_to):
@@ -85,4 +87,5 @@ class ZipFileExtractor(Runnable[Path, List[Path]]):
                 if file_path.suffix.lower() in self.file_types:
                     found_files.append(file_path)
 
+        print(f"{len(found_files)} Files Found")
         return found_files
