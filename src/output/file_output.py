@@ -10,10 +10,14 @@ class FileOutput(Runnable[BaseModel, BaseModel]):
     files_dumped = 0
 
     def __init__(
-        self, output_dir: Union[str, Path], file_name_key: Optional[str] = None
+        self,
+        output_dir: Union[str, Path],
+        file_name_key: Optional[str] = None,
+        overwrite: bool = False,
     ):
         self.file_name_key = file_name_key
         self.output_dir = Path(output_dir).absolute()
+        self.overwrite = overwrite
 
     def invoke(
         self, input: BaseModel, config: RunnableConfig | None = None, **kwargs: Any
@@ -23,12 +27,14 @@ class FileOutput(Runnable[BaseModel, BaseModel]):
         file_name = f"eob_{self.files_dumped}.json"
 
         if self.file_name_key:
-            file_name = f"{str(input.__getattribute__(self.file_name_key))}.json"
+            model_file_name = Path(input.__getattribute__(self.file_name_key))
+            name = model_file_name.name.removesuffix(model_file_name.suffix)
+            file_name = f"{name}.json"
         else:
             self.files_dumped += 1
 
         file_path = self.output_dir / file_name
-        file_path.touch(exist_ok=False)
+        file_path.touch(exist_ok=self.overwrite)
 
         file = open(file_path, "w")
 
