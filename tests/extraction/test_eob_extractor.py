@@ -5,12 +5,12 @@ from src.extraction.eob_extractor import EobExtractor
 from src.extraction.llm.gemini_flash import GoogleGeminiFlash
 from src.extraction.prompt.extract_data_prompt_template import ExtractDataPromptTemplate
 from src.extraction.structured_output.extraction_structured_output import (
-    VerboseExtractionOutput,
+    ExtractionOutput,
 )
 
 
 def test_extractor_formats_prompts_to_single_string(mocker):
-    return_value = VerboseExtractionOutput(**{})
+    return_value = ExtractionOutput(**{})
     mock_runnable = RunnableLambda(lambda _: return_value)
     llm_spy = mocker.spy(mock_runnable, "invoke")
     prompt_spy = mocker.spy(ExtractDataPromptTemplate, "invoke")
